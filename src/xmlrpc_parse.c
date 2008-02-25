@@ -59,7 +59,7 @@ setParseFault(xmlrpc_env * const envP,
     do \
         if (xml_element_children_size(elem) != (count)) \
             XMLRPC_FAIL3(env, XMLRPC_PARSE_ERROR, \
-             "Expected <%s> to have %d children, found %d", \
+             "Expected <%s> to have %d children, found %zd", \
                          xml_element_name(elem), (count), \
                          xml_element_children_size(elem)); \
     while (0)
@@ -298,7 +298,7 @@ xmlrpc_parse_call(xmlrpc_env *    const envP,
     if (xmlDataLen > xmlrpc_limit_get(XMLRPC_XML_SIZE_LIMIT_ID))
         xmlrpc_env_set_fault_formatted(
             envP, XMLRPC_LIMIT_EXCEEDED_ERROR,
-            "XML-RPC request too large.  Max allowed is %u bytes",
+            "XML-RPC request too large.  Max allowed is %zu bytes",
             xmlrpc_limit_get(XMLRPC_XML_SIZE_LIMIT_ID));
     else {
         xml_element * callElemP;
@@ -550,8 +550,8 @@ xmlrpc_parse_response2(xmlrpc_env *    const envP,
     if (xmlDataLen > xmlrpc_limit_get(XMLRPC_XML_SIZE_LIMIT_ID))
         xmlrpc_env_set_fault_formatted(
             envP, XMLRPC_LIMIT_EXCEEDED_ERROR,
-            "XML-RPC response too large.  Our limit is %u characters.  "
-            "We got %u characters",
+            "XML-RPC response too large.  Our limit is %zu characters.  "
+            "We got %zu characters",
             xmlrpc_limit_get(XMLRPC_XML_SIZE_LIMIT_ID), xmlDataLen);
     else {
         xmlrpc_env env;

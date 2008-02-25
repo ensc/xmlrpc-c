@@ -221,7 +221,7 @@ xmlrpc_read_base64(xmlrpc_env *           const envP,
         byteStringValue = malloc(size);
         if (byteStringValue == NULL)
             xmlrpc_env_set_fault_formatted(
-                envP, XMLRPC_INTERNAL_ERROR, "Unable to allocate %u bytes "
+                envP, XMLRPC_INTERNAL_ERROR, "Unable to allocate %zu bytes "
                 "for byte string.", size);
         else {
             memcpy(byteStringValue, contents, size);

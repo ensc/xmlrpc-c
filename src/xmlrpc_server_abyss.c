@@ -485,7 +485,7 @@ processCall(TSession *        const abyssSessionP,
     if (contentSize > xmlrpc_limit_get(XMLRPC_XML_SIZE_LIMIT_ID))
         xmlrpc_env_set_fault_formatted(
             &env, XMLRPC_LIMIT_EXCEEDED_ERROR,
-            "XML-RPC request too large (%d bytes)", contentSize);
+            "XML-RPC request too large (%zd bytes)", contentSize);
     else {
         xmlrpc_mem_block * body;
         /* Read XML data off the wire. */

@@ -141,7 +141,7 @@ xmlrpc_read_string(xmlrpc_env *         const envP,
         MALLOCARRAY(stringValue, length + 1);
         if (stringValue == NULL)
             xmlrpc_faultf(envP, "Unable to allocate space "
-                          "for %u-character string", length);
+                          "for %zu-character string", length);
         else {
             memcpy(stringValue, contents, length);
             stringValue[length] = '\0';
@@ -189,7 +189,7 @@ copyAndConvertLfToCrlf(xmlrpc_env *  const envP,
     MALLOCARRAY(dst, dstLen + 1);
     if (dst == NULL)
         xmlrpc_faultf(envP, "Unable to allocate space "
-                      "for %u-character string", dstLen + 1);
+                      "for %zu-character string", dstLen + 1);
     else {
         const char * p;  /* source pointer */
         char * q;        /* destination pointer */
@@ -370,7 +370,7 @@ xmlrpc_read_string_w(xmlrpc_env *     const envP,
         wchar_t * stringValue;
         MALLOCARRAY(stringValue, length + 1);
         if (stringValue == NULL)
-            xmlrpc_faultf(envP, "Unable to allocate space for %u-byte string", 
+            xmlrpc_faultf(envP, "Unable to allocate space for %zu-byte string",
                           length);
         else {
             memcpy(stringValue, wcontents, length * sizeof(wchar_t));
@@ -422,7 +422,7 @@ wCopyAndConvertLfToCrlf(xmlrpc_env *     const envP,
     MALLOCARRAY(dst, dstLen + 1);
     if (dst == NULL)
         xmlrpc_faultf(envP, "Unable to allocate space "
-                      "for %u-character string", dstLen + 1);
+                      "for %zu-character string", dstLen + 1);
     else {
         const wchar_t * p;  /* source pointer */
         wchar_t * q;        /* destination pointer */

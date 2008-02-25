@@ -468,7 +468,7 @@ validateFormat(xmlrpc_env * const envP,
 
     if (strlen(dt) < 17)
         xmlrpc_faultf(envP,
-                      "Invalid length of %u of datetime string.  "
+                      "Invalid length of %zu of datetime string.  "
                       "Must be at least 17 characters",
                       strlen(dt));
     else {
