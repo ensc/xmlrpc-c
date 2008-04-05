@@ -1,0 +1,105 @@
+#! /bin/sh
+
+comp=
+
+need_cxx=
+need_client=
+need_server=
+need_abyss=
+need_pstream=
+need_packetsocket=
+need_cgi=
+
+show_help() {
+    cat <<EOF
+Usage: xmlrpc-c-config <feature> ... <option> ...
+
+The features are:
+  c++            legacy C++ wrapper API
+  c++2           modern C++ API
+  client         client functions
+  cgi-server     CGI-based server functions
+  abyss-server   ABYSS-based server functions
+  pstream-server pstream-based server functions
+  server-util    basic server functions (implied by *-server)
+
+Options are:
+  --version      The version number of the package
+  --features     List all features (aka modules) currently installed
+  --cflags       C compiler flags to use when '#include'ing package headers
+  --libs         Libraries and flags to use when linking programs normally
+  --ldadd        Libraries to use with automake
+  --ldflags      Flags to use with automake & libtool
+  --prefix       The prefix under which the package was installed
+EOF
+    exit $1
+}
+
+test $# -ne 0 || show_help 1 >&2
+
+while test $# -gt 0; do
+    case $1 in
+      (c++)			comp="$comp xmlrpc_cpp";;
+      (server-util)		need_server=1;;
+      (cgi-server)		need_cgi=1;;
+      (c++2)			need_cxx=1;;
+      (abyss-server)		need_abyss=1;;
+      (pstream-server)		need_pstream=1;;
+      (packetsocket)		need_packetsocket=1;;
+      (client|libwww-client)	need_client=1;;
+      (--help)			show_help 0;;
+      (--) shift; break;;
+      (--*) break;;
+      (*)
+      echo "Unrecognized token '$1'"
+      exit 1
+      ;;
+    esac
+    shift
+done
+
+if test -z "$need_cxx"; then
+    test -z "$need_client" || comp="$comp xmlrpc_client"
+    test -z "$need_abyss"  || comp="$comp xmlrpc_server_abyss"
+    test -z "$need_server" || comp="$comp xmlrpc_server"
+    test -z "$need_cgi"    || comp="$comp xmlrpc_server_cgi"
+else
+    test -z "$need_client" || comp="$comp xmlrpc_client++"
+    test -z "$need_abyss"  || comp="$comp xmlrpc_server_abyss++"
+    test -z "$need_server" || comp="$comp xmlrpc_server++"
+    test -z "$need_cgi"    || comp="$comp xmlrpc_server_cgi++"
+fi
+
+test -z "$need_pstream"      || comp="$comp xmlrpc_server_pstream++"
+test -z "$need_packetsocket" || comp="$comp xmlrpc_packetsocket"
+test -n "$comp"              || comp="xmlrpc xmlrpc_util"
+
+case $1 in
+  (--features|--modules)
+  echo "c++ abyss-server curl-client"
+  exit 0
+  ;;
+  (--version)
+  comp=xmlrpc
+  set -- --modversion
+  ;;
+  (--exec-prefix)
+  comp=xmlrpc
+  set -- --variable=prefix
+  ;;
+  (--*dir|--prefix)
+  comp=xmlrpc
+  set -- --variable=${1##--}
+  ;;
+  (--ldflags)
+  set -- --libs-only-L
+  ;;
+  (--ldadd)
+  set -- --libs-only-l
+  ;;
+  (--cflags)
+  set -- "$1"
+  ;;
+esac
+
+exec pkg-config "$@" $comp
