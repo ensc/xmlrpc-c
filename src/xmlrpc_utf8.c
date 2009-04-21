@@ -246,22 +246,6 @@ decode_utf8(xmlrpc_env * const env,
 
 
 
-/*=========================================================================
-**  xmlrpc_validate_utf8
-**=========================================================================
-**  Make sure that a UTF-8 string is valid.
-*/
-
-void 
-xmlrpc_validate_utf8 (xmlrpc_env * const env,
-                      const char * const utf8_data,
-                      size_t       const utf8_len) {
-
-    decode_utf8(env, utf8_data, utf8_len, NULL, NULL);
-}
-
-
-
 xmlrpc_mem_block *
 xmlrpc_utf8_to_wcs(xmlrpc_env * const envP,
                    const char * const utf8_data,
@@ -381,6 +365,27 @@ xmlrpc_utf8_to_wcs(xmlrpc_env * const envP,
 
     return NULL;
 }
+
+
+
+/*=========================================================================
+**  xmlrpc_validate_utf8
+**=========================================================================
+**  Make sure that a UTF-8 string is valid.
+*/
+
+void 
+xmlrpc_validate_utf8 (xmlrpc_env * const env,
+                      const char * const utf8_data,
+                      size_t       const utf8_len) {
+
+#if HAVE_UNICODE_WCHAR
+    decode_utf8(env, utf8_data, utf8_len, NULL, NULL);
+#endif
+}
+
+
+
 #endif /* HAVE_UNICODE_WCHAR */
 
 

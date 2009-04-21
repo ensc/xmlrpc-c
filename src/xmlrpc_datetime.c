@@ -210,6 +210,14 @@ makeTimezoneUtc(xmlrpc_env *  const envP,
 	/* Windows implementation does not exist */
 	assert(TRUE);
 #endif
+    /* A Solaris 11 user reported in February 2009 that setting TZ = ""
+       apparently did not cause mktime() to do UTC.  It used the standard
+       local time zone, thus causing Xmlrpc-c to generate and parse
+       XML-RPC incorrectly.  A workaround is to use newer Xmlrpc-c,
+       which doesn't use mktime().  Earlier reports from Solaris users
+       were that it didn't even have setenv(), but apparently that was
+       not the case in the aforementioned Solaris 11 system.
+    */
 
     if (haveSetenv) {
         if (tz) {
