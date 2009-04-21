@@ -368,6 +368,10 @@ xmlrpc_utf8_to_wcs(xmlrpc_env * const envP,
 
 
 
+#endif /* HAVE_UNICODE_WCHAR */
+
+
+
 /*=========================================================================
 **  xmlrpc_validate_utf8
 **=========================================================================
@@ -384,8 +388,5 @@ xmlrpc_validate_utf8 (xmlrpc_env * const env,
 #endif
 }
 
-
-
-#endif /* HAVE_UNICODE_WCHAR */
 
 
