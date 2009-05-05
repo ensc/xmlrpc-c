@@ -731,7 +731,7 @@ xmlrpc_server_abyss_set_handlers(TServer *         const srvP,
 
 
 static void
-oldHighLevelAbyssRun(xmlrpc_env *                      const envP ATTR_UNUSED,
+oldHighLevelAbyssRun(xmlrpc_env *                      const envP,
                      const xmlrpc_server_abyss_parms * const parmsP,
                      unsigned int                      const parmSize) {
 /*----------------------------------------------------------------------------
@@ -748,27 +748,32 @@ oldHighLevelAbyssRun(xmlrpc_env *                      const envP ATTR_UNUSED,
     TServer server;
     runfirstFn runfirst;
     void * runfirstArg;
+    abyss_bool success;
     
     DateInit();
     
-    ServerCreate(&server, "XmlRpcServer", 8080, DEFAULT_DOCS, NULL);
-    
-    ConfReadServerFile(parmsP->config_file_name, &server);
-        
-    setHandlers(&server, "/RPC2", parmsP->registryP, false);
-        
-    ServerInit(&server);
-    
-    if (parmSize >= XMLRPC_APSIZE(runfirst_arg)) {
-        runfirst    = parmsP->runfirst;
-        runfirstArg = parmsP->runfirst_arg;
-    } else {
-        runfirst    = NULL;
-        runfirstArg = NULL;
-    }
-    runServerDaemon(&server, runfirst, runfirstArg);
+    success = ServerCreate(&server, "XmlRpcServer", 8080, DEFAULT_DOCS, NULL);
 
-    ServerFree(&server);
+    if (!success)
+        xmlrpc_faultf(envP, "Failed to create Abyss server object");
+    else {
+        ConfReadServerFile(parmsP->config_file_name, &server);
+        
+        setHandlers(&server, "/RPC2", parmsP->registryP, false);
+        
+        ServerInit(&server);
+    
+        if (parmSize >= XMLRPC_APSIZE(runfirst_arg)) {
+            runfirst    = parmsP->runfirst;
+            runfirstArg = parmsP->runfirst_arg;
+        } else {
+            runfirst    = NULL;
+            runfirstArg = NULL;
+        }
+        runServerDaemon(&server, runfirst, runfirstArg);
+
+        ServerFree(&server);
+    }
 }
 
 
@@ -904,8 +909,13 @@ createServer(xmlrpc_env *                      const envP,
             createServerBoundSocket(envP, socketFd, logFileName,
                                     serverP, socketPP);
         else {
-            ServerCreate(serverP, "XmlRpcServer", portNumber, DEFAULT_DOCS, 
-                         logFileName);
+            abyss_bool success;
+
+            success = ServerCreate(serverP, "XmlRpcServer", portNumber,
+                                   DEFAULT_DOCS, logFileName);
+
+            if (!success)
+                xmlrpc_faultf(envP, "Failed to create Abyss server object");
             
             *socketPP = NULL;
         }
@@ -1137,19 +1147,26 @@ void
 xmlrpc_server_abyss_init(int          const flags ATTR_UNUSED, 
                          const char * const config_file) {
 
+    abyss_bool success;
+
     DateInit();
     MIMETypeInit();
 
-    ServerCreate(&globalSrv, "XmlRpcServer", 8080, DEFAULT_DOCS, NULL);
+    success = ServerCreate(&globalSrv, "XmlRpcServer", 8080, DEFAULT_DOCS,
+                           NULL);
     
-    ConfReadServerFile(config_file, &globalSrv);
+    if (!success)
+        abort();
+    else {
+        ConfReadServerFile(config_file, &globalSrv);
 
-    xmlrpc_server_abyss_init_registry();
+        xmlrpc_server_abyss_init_registry();
         /* Installs /RPC2 handler and default handler that use the
            built-in registry.
         */
 
-    ServerInit(&globalSrv);
+        ServerInit(&globalSrv);
+    }
 }
 
 
