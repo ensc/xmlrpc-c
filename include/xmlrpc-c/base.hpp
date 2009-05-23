@@ -7,6 +7,9 @@
 #include <vector>
 #include <map>
 #include <string>
+#ifndef MSVCRT
+#include <sys/time.h>  /* For struct timeval */
+#endif
 
 #include <xmlrpc-c/base.h>
 
