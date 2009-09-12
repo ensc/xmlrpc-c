@@ -267,6 +267,8 @@ void
 MIMETypeDestroy(MIMEType * const MIMETypeP) {
 
     PoolFree(&MIMETypeP->pool);
+
+    free(MIMETypeP);
 }
 
 

@@ -20,9 +20,18 @@ simpleVasprintf(char **      const retvalP,
 
     result = malloc(initialSize);
     if (result != NULL) {
-        size_t bytesNeeded;
+        ssize_t bytesNeeded;
         bytesNeeded = vsnprintf(result, initialSize, fmt, varargs);
-        if (bytesNeeded > initialSize) {
+        if (bytesNeeded == -1) {
+            /* This is one of those old systems where vsnprintf()
+               fails when it needs more buffer space than we gave it.
+               Rather than mess with this highly unlikely
+               case (old system and string > 4095 characters), we just
+               treat this like an out of memory failure.
+            */
+            free(result);
+            result = NULL;
+        } else if (bytesNeeded > initialSize) {
             free(result);
             result = malloc(bytesNeeded);
             if (result != NULL)
