@@ -251,8 +251,11 @@ static void
 restoreTimezone(const char * const oldTz) {
 
     if (haveSetenv) {
-        setenv("TZ", oldTz, 1);
-        free((char*)oldTz);
+        if (oldTz) {
+            setenv("TZ", oldTz, 1);
+            free((char*)oldTz);
+        } else
+            unsetenv("TZ");
     }
 }
 
@@ -403,6 +406,7 @@ parseDatetime(xmlrpc_env * const envP,
             brokenTime.tm_mday  = D;
             brokenTime.tm_mon   = M - 1;
             brokenTime.tm_year  = Y - 1900;
+            brokenTime.tm_isdst = 0;
             
             mkAbsTime(envP, brokenTime, timeValueP);
         }
