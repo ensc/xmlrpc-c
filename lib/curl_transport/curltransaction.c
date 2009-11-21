@@ -758,6 +758,7 @@ curlTransaction_create(xmlrpc_env *               const envP,
         curlTransactionP->curlSessionP = curlSessionP;
         curlTransactionP->userContextP = userContextP;
         curlTransactionP->progress     = progress;
+	curlTransactionP->curlError[0] = '\0';
 
         curlTransactionP->serverUrl = strdup(serverP->serverUrl);
         if (curlTransactionP->serverUrl == NULL)
