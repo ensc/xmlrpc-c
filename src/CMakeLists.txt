@@ -54,6 +54,7 @@ add_subdirectory(test)
 ### libxmlrpc.so
 add_library(xmlrpc SHARED
   double.c parse_datetime.c parse_value.c resource.c trace.c version.c
+  json.c
   ${xmlrpc_xml_parser}
   xmlrpc_data.c xmlrpc_datetime.c xmlrpc_string.c
   xmlrpc_array.c xmlrpc_struct.c

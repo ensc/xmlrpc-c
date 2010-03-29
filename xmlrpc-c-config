@@ -72,8 +72,7 @@ fi
 
 test -z "$need_pstream"      || comp="$comp xmlrpc_server_pstream++"
 test -z "$need_packetsocket" || comp="$comp xmlrpc_packetsocket"
-
-dummy_comp=xmlrpc_client
+test -n "$comp"              || comp="xmlrpc xmlrpc_util"
 
 case $1 in
   (--features|--modules)
@@ -81,12 +80,15 @@ case $1 in
   exit 0
   ;;
   (--version)
+  comp=xmlrpc
   set -- --modversion
   ;;
   (--exec-prefix)
+  comp=xmlrpc
   set -- --variable=prefix
   ;;
   (--*dir|--prefix)
+  comp=xmlrpc
   set -- --variable=${1##--}
   ;;
   (--ldflags)
@@ -98,11 +100,6 @@ case $1 in
   (--cflags)
   set -- "$1"
   ;;
-  (*)
-  dummy_comp=
-  ;;
 esac
-
-test x"$comp" != x || comp=$dummy_comp
 
 exec pkg-config "$@" $comp

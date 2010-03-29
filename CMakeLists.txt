@@ -12,7 +12,7 @@ endif()
 
 
 set(XMLRPC_C_VERSION_MAJOR "1"  CACHE STRING "Version (major) of xmlrpc-c")
-set(XMLRPC_C_VERSION_MINOR "21" CACHE STRING "Version (minor) of xmlrpc-c")
+set(XMLRPC_C_VERSION_MINOR "22" CACHE STRING "Version (minor) of xmlrpc-c")
 set(XMLRPC_C_VERSION_POINT "00" CACHE STRING "Version (point) of xmlrpc-c")
 
 set(XMLRPC_C_VERSION
@@ -275,8 +275,6 @@ install(PROGRAMS xmlrpc-c-config DESTINATION ${_bin})
 enable_testing()
 
 add_subdirectory(lib)
-add_subdirectory(Windows)
-add_subdirectory(doc)
 add_subdirectory(examples)
 add_subdirectory(include)
 add_subdirectory(src)
