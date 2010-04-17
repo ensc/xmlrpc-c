@@ -122,7 +122,7 @@ xmlrpc_atoi(xmlrpc_env *env, char *str, size_t strlen,
     /* Look for out-of-range errors which didn't produce ERANGE. */
     if (i < min || i > max)
         XMLRPC_FAIL3(env, XMLRPC_PARSE_ERROR,
-                     "\"%s\" must be in range %d to %d", str, min, max);
+                     "\"%s\" must be in range %ld to %ld", str, min, max);
 
     /* Check for unused characters. */
     if (end != str + strlen)
