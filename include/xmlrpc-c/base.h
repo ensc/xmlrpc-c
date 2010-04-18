@@ -7,7 +7,6 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <time.h>
-#include <stdint.h>
 #include <xmlrpc-c/util.h>
 #include <xmlrpc-c/config.h>
   /* Defines XMLRPC_HAVE_WCHAR, XMLRPC_INT64, XMLRPC_HAVE_TIMEVAL */
