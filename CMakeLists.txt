@@ -13,7 +13,7 @@ endif()
 
 set(XMLRPC_C_VERSION_MAJOR "1"  CACHE STRING "Version (major) of xmlrpc-c")
 set(XMLRPC_C_VERSION_MINOR "22" CACHE STRING "Version (minor) of xmlrpc-c")
-set(XMLRPC_C_VERSION_POINT "00" CACHE STRING "Version (point) of xmlrpc-c")
+set(XMLRPC_C_VERSION_POINT "01" CACHE STRING "Version (point) of xmlrpc-c")
 
 set(XMLRPC_C_VERSION
   "${XMLRPC_C_VERSION_MAJOR}.${XMLRPC_C_VERSION_MINOR}.${XMLRPC_C_VERSION_POINT}"
