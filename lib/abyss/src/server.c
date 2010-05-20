@@ -1118,6 +1118,8 @@ serverFunc(void * const userHandle) {
 
         if (!success)
             connectionDone = TRUE;
+        else if (srvP->terminationRequested)
+            connectionDone = TRUE;
         else {
             abyss_bool const lastReqOnConn =
                 requestCount + 1 >= srvP->keepalivemaxconn;
