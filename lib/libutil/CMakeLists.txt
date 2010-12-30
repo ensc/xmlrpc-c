@@ -8,6 +8,7 @@ add_library(xmlrpc_util SHARED
   memblock.c
   select.c
   sleep.c
+  string_number.c
   time.c
   utf8.c)
 
