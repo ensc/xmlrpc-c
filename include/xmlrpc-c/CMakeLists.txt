@@ -10,6 +10,7 @@ list(APPEND headers
   c_util.h
   util.h
   base.h
+  json.h
   abyss.h
   abyss_unixsock.h
   abyss_winsock.h

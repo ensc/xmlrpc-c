@@ -495,6 +495,10 @@ setupCurlSession(xmlrpc_env *               const envP,
     curl_easy_setopt(curlSessionP, CURLOPT_POST, 1);
     curl_easy_setopt(curlSessionP, CURLOPT_URL, curlTransactionP->serverUrl);
 
+    curl_easy_setopt(curlSessionP, CURLOPT_FOLLOWLOCATION, 1);
+    curl_easy_setopt(curlSessionP, CURLOPT_MAXREDIRS, (long)10);
+    curl_easy_setopt(curlSessionP, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+
     XMLRPC_MEMBLOCK_APPEND(char, envP, callXmlP, "\0", 1);
     if (!envP->fault_occurred) {
         curl_easy_setopt(curlSessionP, CURLOPT_POSTFIELDS, 

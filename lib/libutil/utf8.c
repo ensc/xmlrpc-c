@@ -285,8 +285,8 @@ decodeUtf8(xmlrpc_env * const envP,
                 if (utf8Cursor + length > utf8_len) {
                     xmlrpc_env_set_fault_formatted(
                         envP, XMLRPC_INVALID_UTF8_ERROR,
-                        "Invalid UTF-8 sequence indicates a %zu-byte sequence "
-                        "when only %zu bytes are left in the string",
+                        "Invalid UTF-8 sequence indicates a %u-byte sequence "
+                        "when only %u bytes are left in the string",
                         (unsigned)length, (unsigned)(utf8_len - utf8Cursor));
                 } else {
                     decodeMultibyte(envP, &utf8_data[utf8Cursor], length, &wc);

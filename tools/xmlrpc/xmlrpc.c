@@ -296,7 +296,7 @@ buildBytestring(xmlrpc_env *    const envP,
 
     if (valueStringSize / 2 * 2 != valueStringSize)
         xmlrpc_faultf(envP, "Hexadecimal text is not an even "
-                      "number of characters (it is %zu characters)",
+                      "number of characters (it is %u characters)",
                       (unsigned)strlen(valueString));
     else {
         size_t const byteStringSize = strlen(valueString)/2;

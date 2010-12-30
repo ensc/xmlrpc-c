@@ -10,6 +10,8 @@ set(test_SOURCES
   serialize.c
   serialize_value.c
   server_abyss.c
+  testtool.c
+  testtool.h
   value.c
   value_datetime.c
   xml_data.c)
@@ -25,8 +27,8 @@ endif(MUST_BUILD_CLIENT)
 add_executable(src-test ${test_SOURCES})
 target_link_libraries(src-test xmlrpc_server_abyss util ${test_LIBS})
 
-add_executable(cgitest1 cgitest1.c)
-target_link_libraries(cgitest1 xmlrpc_server_cgi)
+add_executable(src-cgitest1 cgitest1.c testtool.c testtool.h)
+target_link_libraries(src-cgitest1 xmlrpc_server_cgi)
 
 add_custom_command(TARGET src-test
   POST_BUILD

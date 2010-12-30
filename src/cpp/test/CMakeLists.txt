@@ -1,7 +1,8 @@
 # -*- cmake -*-
 
 set(test_SOURCES
-  test.cpp registry.cpp server_abyss.cpp server_pstream.cpp tools.cpp)
+  test.cpp base64.cpp registry.cpp server_abyss.cpp
+  server_pstream.cpp tools.cpp value.cpp xml.cpp )
 
 if(MUST_BUILD_CLIENT)
   list(APPEND test_SOURCES testclient.cpp)

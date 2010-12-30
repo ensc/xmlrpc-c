@@ -121,7 +121,8 @@ xmlrpc_vasprintf(const char ** const retvalP,
     char * string;
 
 #if HAVE_ASPRINTF
-    vasprintf(&string, fmt, varargs);
+    if (vasprintf(&string, fmt, varargs) < 0)
+        string = NULL;
 #else
     simpleVasprintf(&string, fmt, varargs);
 #endif

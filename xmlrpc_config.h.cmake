@@ -138,4 +138,8 @@
   #define XMLRPC_STRTOULL _strtoui64  /* Windows MSVC */
 #endif
 
+#define XMLRPC_INT64  int64_t
+#define XMLRPC_PRId64 PRId64
+
+
 #endif

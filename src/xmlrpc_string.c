@@ -370,7 +370,7 @@ xmlrpc_read_string_w(xmlrpc_env *     const envP,
         wchar_t * stringValue;
         MALLOCARRAY(stringValue, length + 1);
         if (stringValue == NULL)
-            xmlrpc_faultf(envP, "Unable to allocate space for %zu-byte string",
+            xmlrpc_faultf(envP, "Unable to allocate space for %u-byte string",
                           (unsigned)length);
         else {
             memcpy(stringValue, wcontents, length * sizeof(wchar_t));

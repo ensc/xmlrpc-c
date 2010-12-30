@@ -653,7 +653,7 @@ packetSocket_impl::verifyNothingAccumulated() {
     
     if (this->inPacket)
         throwf("Stream socket closed in the middle of a packet "
-               "(%zu bytes of packet received; no END marker to mark "
+               "(%u bytes of packet received; no END marker to mark "
                "end of packet)", (unsigned)this->packetAccumP->getLength());
 }
 

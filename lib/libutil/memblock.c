@@ -74,7 +74,7 @@ xmlrpc_mem_block_init(xmlrpc_env *       const envP,
 
     blockP->_block = (void*) malloc(blockP->_allocated);
     if (!blockP->_block)
-        xmlrpc_faultf(envP, "Can't allocate %zu-byte memory block",
+        xmlrpc_faultf(envP, "Can't allocate %u-byte memory block",
                       (unsigned)blockP->_allocated);
 }
 
