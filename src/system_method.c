@@ -385,7 +385,7 @@ system_methodHelp(xmlrpc_env *   const envP,
     XMLRPC_ASSERT_ENV_OK(envP);
     XMLRPC_ASSERT_VALUE_OK(paramArrayP);
     XMLRPC_ASSERT_PTR_OK(serverInfo);
-
+    
     xmlrpc_decompose_value(envP, paramArrayP, "(s)", &methodName);
 
     if (!envP->fault_occurred) {
@@ -467,8 +467,8 @@ buildSignatureValue(xmlrpc_env *              const envP,
 
     if (envP->fault_occurred)
         xmlrpc_DECREF(sigValueP);
-    else
-        *sigValuePP = sigValueP;
+
+    *sigValuePP = sigValueP;
 }
 
                     
@@ -529,6 +529,15 @@ getSignatureList(xmlrpc_env *      const envP,
 
 
 
+/* Microsoft Visual C in debug mode produces code that complains about
+   returning an undefined value from system_methodSignature().  It's a bogus
+   complaint, because this function is defined to return nothing meaningful
+   those cases.  So we disable the check.
+*/
+#pragma runtime_checks("u", off)
+
+
+
 static xmlrpc_value *
 system_methodSignature(xmlrpc_env *   const envP,
                        xmlrpc_value * const paramArrayP,
@@ -544,8 +553,6 @@ system_methodSignature(xmlrpc_env *   const envP,
     XMLRPC_ASSERT_ENV_OK(envP);
     XMLRPC_ASSERT_VALUE_OK(paramArrayP);
     XMLRPC_ASSERT_PTR_OK(serverInfo);
-
-    retvalP = NULL;  /* quiet compiler unset variable warning */
 
     xmlrpc_env_init(&env);
 
@@ -577,6 +584,10 @@ system_methodSignature(xmlrpc_env *   const envP,
 
     return retvalP;
 }
+
+
+
+#pragma runtime_checks("u", restore)
 
 
 
@@ -613,8 +624,6 @@ system_shutdown(xmlrpc_env *   const envP,
     XMLRPC_ASSERT_PTR_OK(serverInfo);
 
     xmlrpc_env_init(&env);
-
-    retvalP = NULL;  /* quiet compiler warning */
 
     /* Turn our arguments into something more useful. */
     xmlrpc_decompose_value(&env, paramArrayP, "(s)", &comment);

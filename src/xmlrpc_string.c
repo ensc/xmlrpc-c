@@ -141,7 +141,7 @@ xmlrpc_read_string(xmlrpc_env *         const envP,
         MALLOCARRAY(stringValue, length + 1);
         if (stringValue == NULL)
             xmlrpc_faultf(envP, "Unable to allocate space "
-                          "for %zu-character string", length);
+                          "for %u-character string", (unsigned)length);
         else {
             memcpy(stringValue, contents, length);
             stringValue[length] = '\0';
@@ -189,7 +189,7 @@ copyAndConvertLfToCrlf(xmlrpc_env *  const envP,
     MALLOCARRAY(dst, dstLen + 1);
     if (dst == NULL)
         xmlrpc_faultf(envP, "Unable to allocate space "
-                      "for %zu-character string", dstLen + 1);
+                      "for %u-character string", (unsigned)dstLen + 1);
     else {
         const char * p;  /* source pointer */
         char * q;        /* destination pointer */
@@ -371,7 +371,7 @@ xmlrpc_read_string_w(xmlrpc_env *     const envP,
         MALLOCARRAY(stringValue, length + 1);
         if (stringValue == NULL)
             xmlrpc_faultf(envP, "Unable to allocate space for %zu-byte string",
-                          length);
+                          (unsigned)length);
         else {
             memcpy(stringValue, wcontents, length * sizeof(wchar_t));
             stringValue[length] = '\0';
@@ -422,7 +422,7 @@ wCopyAndConvertLfToCrlf(xmlrpc_env *     const envP,
     MALLOCARRAY(dst, dstLen + 1);
     if (dst == NULL)
         xmlrpc_faultf(envP, "Unable to allocate space "
-                      "for %zu-character string", dstLen + 1);
+                      "for %u-character string", (unsigned)dstLen + 1);
     else {
         const wchar_t * p;  /* source pointer */
         wchar_t * q;        /* destination pointer */
@@ -750,7 +750,7 @@ xmlrpc_string_new_va(xmlrpc_env * const envP,
     
     xmlrpc_vasprintf(&formattedString, format, args);
 
-    if (formattedString == xmlrpc_strsol) {
+    if (xmlrpc_strnomem(formattedString)) {
         xmlrpc_faultf(envP, "Out of memory building formatted string");
         retvalP = NULL;  /* defeat compiler warning */
     } else

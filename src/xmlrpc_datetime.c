@@ -470,7 +470,7 @@ validateFormat(xmlrpc_env * const envP,
         xmlrpc_faultf(envP,
                       "Invalid length of %zu of datetime string.  "
                       "Must be at least 17 characters",
-                      strlen(dt));
+                      (unsigned)strlen(dt));
     else {
         validateFirst17(envP, dt);
 
@@ -478,6 +478,15 @@ validateFormat(xmlrpc_env * const envP,
             validateFractionalSeconds(envP, dt);
     }
 }
+
+
+
+/* Microsoft Visual C in debug mode produces code that complains about
+   returning an undefined value from xmlrpc_datetime_new_str().  It's a bogus
+   complaint, because this function is defined to return nothing meaningful
+   those cases.  So we disable the check.
+*/
+#pragma runtime_checks("u", off)
 
 
 
@@ -508,11 +517,14 @@ xmlrpc_datetime_new_str(xmlrpc_env * const envP,
            xmlrpc_value has to deal with it.
         */
         retval = xmlrpc_datetime_new(envP, dt);
-    } else
-        retval = NULL;  /* quiet compiler warning */
+    }
 
     return retval;
 }
+
+
+
+#pragma runtime_checks("u", restore)
 
 
 
@@ -523,11 +535,10 @@ xmlrpc_datetime_new_usec(xmlrpc_env * const envP,
 
     xmlrpc_value * valueP;
 
-    if (usecs >= 1000000) {
+    if (usecs >= 1000000)
         xmlrpc_faultf(envP, "Number of fractional microseconds must be less "
                       "than one million.  You specified %u", usecs);
-        valueP = NULL;  /* quiet compiler warning */
-    } else {
+    else {
         struct tm brokenTime;
         xmlrpc_datetime dt;
 

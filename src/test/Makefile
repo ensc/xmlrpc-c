@@ -19,7 +19,7 @@ LDADD_CGI_SERVER = \
 
 default: all
 
-INCLUDES = -I$(BLDDIR) -I $(SRCDIR)/include -I$(SRCDIR)/lib/util/include \
+INCLUDES = -I$(BLDDIR) -Isrcdir/include -Isrcdir/lib/util/include \
 
 PROGS = test cgitest1
 
@@ -28,6 +28,7 @@ all: $(PROGS)
 LDFLAGS = $(LADD)
 
 TEST_OBJS = \
+  testtool.o \
   test.o \
   abyss.o \
   cgi.o \
@@ -50,6 +51,11 @@ endif
 
 include $(SRCDIR)/common.mk
 
+# This 'common.mk' dependency makes sure the symlinks get built before
+# this make file is used for anything.
+
+$(SRCDIR)/common.mk: srcdir blddir
+
 test: \
   $(XMLRPC_C_CONFIG) \
   $(TEST_OBJS) $(LIBXMLRPC_A) $(LIBXMLRPC_UTIL_A) \
@@ -60,9 +66,11 @@ test: \
 	$(CCLD) -o $@ $(LDFLAGS) \
 	    $(TEST_OBJS) $(LDADD_CLIENT) $(LDADD_ABYSS_SERVER) $(CASPRINTF)
 
-cgitest1:%:%.o $(LIBXMLRPC_SERVER_A) $(LIBXMLRPC_SERVER_CGI_A) \
+CGITEST1_OBJS = cgitest1.o testtool.o
+
+cgitest1: $(CGITEST1_OBJS) $(LIBXMLRPC_SERVER_A) $(LIBXMLRPC_SERVER_CGI_A) \
   $(LIBXMLRPC_A) $(LIBXMLRPC_UTIL_A) $(LIBXMLRPC_XML)
-	$(CCLD) -o $@ $< $(LDFLAGS) $(LDADD_CGI_SERVER)
+	$(CCLD) -o $@ $(CGITEST1_OBJS) $(LDFLAGS) $(LDADD_CGI_SERVER)
 
 OBJS = $(TEST_OBJS) cgitest1.o
 

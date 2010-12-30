@@ -17,8 +17,14 @@ include $(SRCDIR)/version.mk
 # fully made.
 .DELETE_ON_ERROR:
 
-GCC_WARNINGS = -Wall -Wundef -Wimplicit -W -Winline
+GCC_WARNINGS = -Wall -W -Wno-uninitialized -Wundef -Wimplicit -Winline \
+  -Wno-unknown-pragmas
   # We need -Wwrite-strings after we fix all the missing consts
+  #
+  # -Wuninitialized catches some great bugs, but it also flags a whole lot
+  # of perfectly good code that can't be written any better.  Too bad there's
+  # no way to annotate particular variables as being OK, so we could turn
+  # on -Wuninitialized for all the others.
 
 GCC_C_WARNINGS = $(GCC_WARNINGS) \
   -Wmissing-declarations -Wstrict-prototypes -Wmissing-prototypes
@@ -302,11 +308,6 @@ $(TARGET_MODS_PP:%=%.osh):%.osh:%.cpp
 # is a dependency is newer than the symbolic link pointing to it and wants
 # to rebuild the symbolic link.  So we don't make $(SRCDIR) a
 # dependency of 'srcdir'.
-
-# We should do the same for 'blddir'.  We did once before, then undid
-# it in an erroneous effort to enable parallel make.  It's a little harder
-# with blddir; when we did it before, we had to use the non-symlink
-# version in a few places.
 
 srcdir:
 	$(LN_S) $(SRCDIR) $@

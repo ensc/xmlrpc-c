@@ -37,6 +37,9 @@ using namespace xmlrpc_c;
 using namespace std;
 
 
+
+namespace {
+
 static void
 closesock(int const fd) {
 #ifdef WIN32
@@ -262,6 +265,8 @@ public:
                                     .timeout(20)
                                     .dontAdvertise(true)
                                     .uriPath("/xmlrpc")
+                                    .chunkResponse(true)
+                                    .allowOrigin("*")
                                     .serverOwnsSignals(false)
                                     .expectSigchld(true)
                 );
@@ -320,6 +325,10 @@ public:
             );
     }
 };
+
+
+
+} // unnamed namespace
 
 
 

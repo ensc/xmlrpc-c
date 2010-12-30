@@ -377,7 +377,7 @@ validateFormatNoRegex(xmlrpc_env * const envP,
             envP, XMLRPC_PARSE_ERROR, 
             "Invalid length of %zu of datetime.  "
             "Must be at least 17 characters",
-            strlen(dt));
+            (unsigned)strlen(dt));
     else {
         validateFirst17(envP, dt);
 

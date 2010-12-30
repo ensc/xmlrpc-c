@@ -34,6 +34,7 @@
 #include "xmlrpc-c/girerr.hpp"
 using girerr::error;
 using girerr::throwf;
+#include "xmlrpc-c/sleep_int.h"
 #include "xmlrpc-c/base.hpp"
 #include "xmlrpc-c/registry.hpp"
 #include "xmlrpc-c/server_pstream.hpp"
@@ -45,6 +46,7 @@ using namespace xmlrpc_c;
 using namespace std;
 
 
+namespace {
 
 static void
 setNonBlocking(XMLRPC_SOCKET const socket) {
@@ -154,11 +156,42 @@ string const testCallInfoResponseXml(
     xmlPrologue +
     "<methodResponse>\r\n"
     "<params>\r\n"
-    "<param><value><string>this is a test callInfo</string></value>"
+    "<param><value><nil/></value>"
     "</param>\r\n"
     "</params>\r\n"
     "</methodResponse>\r\n"
     );
+
+
+
+static void
+waitForNetworkTransport() {
+/*----------------------------------------------------------------------------
+   Wait for a message to travel through the network.
+
+   This is part of our hack to allow us to test client/server communication
+   without the bother of a separate thread for each.  One party writes
+   to a socket, causing the OS to buffer the message, then the other party
+   reads from the socket, getting the buffered message.  We never wait
+   to send or receive, because with only one thread to do both, we would
+   deadlock.  Instead, we just count on the buffer being big enough.
+
+   But on some systems, the message doesn't immediately travel like this.  It
+   takes action by an independent thread (provided by the OS) to move the
+   message.  In particular, we've seen this behavior on Windows (2010.10).
+
+   So we just sleep for a small amount of time to let the message move.
+-----------------------------------------------------------------------------*/
+
+    // xmlrpc_millisecond_sleep() is allowed to return early, and on Windows
+    // it does that in preference to returning late insofar as the clock
+    // resolution doesn't allow returning at the exact time.  It is rumored
+    // that Windows clock period may be as long as 40 milliseconds.
+
+    xmlrpc_millisecond_sleep(50);
+}
+
+
 
 class client {
 /*----------------------------------------------------------------------------
@@ -228,9 +261,8 @@ client::client() {
 
 client::~client() {
 
-    close(this->clientFd);
-
-    close(this->serverFd);
+    XMLRPC_CLOSESOCKET(this->clientFd);
+    XMLRPC_CLOSESOCKET(this->serverFd);
 }
 
 
@@ -241,6 +273,8 @@ client::sendCall(string const& packetBytes) const {
     int rc;
 
     rc = send(this->clientFd, packetBytes.c_str(), packetBytes.length(), 0);
+
+    waitForNetworkTransport();
 
     if (rc < 0)
         throwf("send() of test data to socket failed, errno=%d (%s)",
@@ -283,6 +317,8 @@ client::recvResp(string * const packetBytesP) const {
 
     char buffer[4096];
     int rc;
+
+    waitForNetworkTransport();
 
     rc = recv(this->clientFd, buffer, sizeof(buffer), 0);
 
@@ -761,6 +797,10 @@ public:
         testMultiConnCallInfo();
     }
 };
+
+
+
+} // unnamed namespace
 
 
 

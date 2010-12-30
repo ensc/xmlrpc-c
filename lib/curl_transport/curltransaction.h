@@ -9,7 +9,9 @@
 typedef struct curlTransaction curlTransaction;
 
 typedef void curlt_finishFn(xmlrpc_env * const, void * const);
-typedef void curlt_progressFn(void * const, bool * const);
+typedef void curlt_progressFn(
+    void * const, double const, double const, double const, double const,
+    bool * const);
 
 struct curlSetup {
 
@@ -70,8 +72,18 @@ struct curlSetup {
     const char * randomFile;
     const char * egdSocket;
     const char * sslCipherList;
+
+    const char * proxy;
+    unsigned int proxyPort;
+    unsigned int proxyAuth;
+        /* e.g. CURLAUTH_BASIC, CURLAUTH_NTLM, ... */
+    const char * proxyUserPwd;
+    unsigned int proxyType;
+        /* see enum curl_proxytype: CURLPROXY_HTTP, CURLPROXY_SOCKS4, ... */
+
     unsigned int timeout;
         /* 0 = no Curl timeout.  This is in milliseconds. */
+
     bool verbose;
 };
 
