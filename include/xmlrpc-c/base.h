@@ -90,7 +90,7 @@ typedef int xmlrpc_socket;
 #define XMLRPC_INT32_MAX 0x7fffffff
 #define XMLRPC_INT32_MIN (-XMLRPC_INT32_MAX - 1)
 
-#define XMLRPC_INT64_MAX 0x7fffffffffffffffll
+#define XMLRPC_INT64_MAX ((xmlrpc_int64)0x7fffffffffffffffll)
 #define XMLRPC_INT64_MIN (-XMLRPC_INT64_MAX - 1)
 
 
