@@ -2,7 +2,7 @@
 #define SOCKET_WIN_H_INCLUDED
 
 void
-SocketWinInit(abyss_bool * const succeededP);
+SocketWinInit(const char ** const errorP);
 
 void
 SocketWinTerm(void);

@@ -1,9 +1,12 @@
-ifeq ($(SRCDIR)x,x)
-SRCDIR = $(CURDIR)/../..
+ifeq ($(SRCDIR),)
+  updir = $(shell echo $(dir $(1)) | sed 's/.$$//')
+  LIBDIR := $(call updir,$(CURDIR))
+  SRCDIR := $(call updir,$(LIBDIR))
+  BLDDIR := $(SRCDIR)
 endif
-SUBDIR = lib/expat
+SUBDIR := lib/expat
 
-include $(SRCDIR)/Makefile.config
+include $(BLDDIR)/config.mk
 
 # Build up SUBDIRS:
 SUBDIRS = gennmtab xmlparse xmltok
@@ -30,7 +33,7 @@ check:
 
 dep: $(SUBDIRS:%=%/dep)
 
-include $(SRCDIR)/Makefile.common
+include $(SRCDIR)/common.mk
 
 
 

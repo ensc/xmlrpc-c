@@ -1,14 +1,16 @@
 #ifndef XMLRPC_BASE_HPP_INCLUDED
 #define XMLRPC_BASE_HPP_INCLUDED
 
+#include <xmlrpc-c/config.h>
+
 #include <climits>
 #include <cfloat>
 #include <ctime>
 #include <vector>
 #include <map>
 #include <string>
-#ifndef MSVCRT
-#include <sys/time.h>  /* For struct timeval */
+#if XMLRPC_HAVE_TIMEVAL
+#include <sys/time.h>
 #endif
 
 #include <xmlrpc-c/base.h>
@@ -39,6 +41,7 @@ public:
         TYPE_STRUCT     = 7,
         TYPE_C_PTR      = 8,
         TYPE_NIL        = 9,
+        TYPE_I8         = 10,
         TYPE_DEAD       = 0xDEAD
     };
 
@@ -46,6 +49,9 @@ public:
 
     xmlrpc_c::value&
     operator=(xmlrpc_c::value const&);
+
+    bool
+    isInstantiated() const;
 
     // The following are not meant to be public to users, but just to
     // other Xmlrpc-c library modules.  If we ever go to a pure C++
@@ -57,7 +63,7 @@ public:
 
     void
     addToCStruct(xmlrpc_value * const structP,
-                    std::string const key) const;
+                 std::string    const key) const;
 
     xmlrpc_value *
     cValue() const;
@@ -66,7 +72,7 @@ public:
 
     void
     instantiate(xmlrpc_value * const valueP);
-        // Work only on a placeholder object created by the no-argument
+        // Works only on a placeholder object created by the no-argument
         // constructor.
 
     xmlrpc_value * cValueP;
@@ -99,9 +105,17 @@ public:
 
 class value_string : public value {
 public:
-    value_string(std::string const& cvalue);
+    enum nlCode {nlCode_all, nlCode_lf};
+
+    value_string(std::string const& cppvalue,
+                 nlCode      const  nlCode);
+
+    value_string(std::string const& cppvalue);
 
     value_string(xmlrpc_c::value const baseValue);
+
+    std::string
+    crlfValue() const;
 
     operator std::string() const;
 };
@@ -123,8 +137,14 @@ class value_datetime : public value {
 public:
     value_datetime(std::string const cvalue);
     value_datetime(time_t const cvalue);
+#if XMLRPC_HAVE_TIMEVAL
     value_datetime(struct timeval const& cvalue);
+    operator timeval() const;
+#endif
+#if XMLRPC_HAVE_TIMESPEC
     value_datetime(struct timespec const& cvalue);
+    operator timespec() const;
+#endif
 
     value_datetime(xmlrpc_c::value const baseValue);
 
@@ -146,15 +166,6 @@ public:
 
     size_t
     length() const;
-};
-
-
-
-class value_nil : public value {
-public:
-    value_nil();
-
-    value_nil(xmlrpc_c::value const baseValue);
 };
 
 
@@ -181,6 +192,26 @@ public:
 
     size_t
     size() const;
+};
+
+
+
+class value_nil : public value {
+public:
+    value_nil();
+
+    value_nil(xmlrpc_c::value const baseValue);
+};
+
+
+
+class value_i8 : public value {
+public:
+    value_i8(xmlrpc_int64 const cvalue);
+
+    value_i8(xmlrpc_c::value const baseValue);
+
+    operator xmlrpc_int64() const;
 };
 
 
@@ -258,8 +289,11 @@ class paramList {
 public:
     paramList(unsigned int const paramCount = 0);
 
-    void
+    paramList&
     add(xmlrpc_c::value const param);
+
+    paramList&
+    addx(xmlrpc_c::value const param);
 
     unsigned int
     size() const;
@@ -302,6 +336,11 @@ public:
 
     void
     getNil(unsigned int const paramNumber) const;
+
+    xmlrpc_int64
+    getI8(unsigned int const paramNumber,
+          xmlrpc_int64 const minimum = XMLRPC_INT64_MIN,
+          xmlrpc_int64 const maximum = XMLRPC_INT64_MAX) const;
 
     void
     verifyEnd(unsigned int const paramNumber) const;
