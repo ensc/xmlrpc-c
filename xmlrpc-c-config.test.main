@@ -126,7 +126,14 @@ while test $# -gt 0; do
       echo "$the_includes"
       ;;
     --libs)
-      echo "$the_libdirs $the_libs $packetsocket_lib $the_wl_rpath"
+      if test "$NEED_WL_RPATH" = "yes"; then
+          rpath=$the_wl_rpath
+      elif test "$NEED_RPATH" = "yes"; then
+          rpath=$the_rpath
+      else
+          rpath=
+      fi
+      echo "$the_libdirs $rpath $the_libs $packetsocket_lib"
       ;;
     --ldadd)
       echo "$the_libdirs $the_libs $packetsocket_lib"
