@@ -24,7 +24,6 @@ class XMLRPC_DLLEXPORT callInfo {
    information pertinent to that kind of server.
 -----------------------------------------------------------------------------*/
 public:
-    callInfo() {};
     virtual ~callInfo() {};  // This makes it polymorphic
 };
 
