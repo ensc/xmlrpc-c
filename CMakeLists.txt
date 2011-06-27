@@ -12,7 +12,7 @@ endif()
 
 
 set(XMLRPC_C_VERSION_MAJOR "1"  CACHE STRING "Version (major) of xmlrpc-c")
-set(XMLRPC_C_VERSION_MINOR "26" CACHE STRING "Version (minor) of xmlrpc-c")
+set(XMLRPC_C_VERSION_MINOR "27" CACHE STRING "Version (minor) of xmlrpc-c")
 set(XMLRPC_C_VERSION_POINT "0"  CACHE STRING "Version (point) of xmlrpc-c")
 
 set(XMLRPC_C_VERSION
@@ -205,8 +205,11 @@ endif(HAVE_ATTR_UNUSED)
 
 if(WIN32)
   set(DIRECTORY_SEPARATOR "\\")
+  set(THREAD_LIBS "")
 else(WIN32)
   set(DIRECTORY_SEPARATOR "/")
+  set(THREAD_LIBS "pthread")
+  set(THREAD_LIBS_PKGCONFIG "-lpthread")
 endif(WIN32)
 
 check_include_file(sys/filio.h  HAVE_SYS_FILIO_H)
@@ -274,6 +277,7 @@ install(PROGRAMS xmlrpc-c-config DESTINATION ${_bin})
 
 enable_testing()
 
+add_subdirectory(test)
 add_subdirectory(lib)
 add_subdirectory(examples)
 add_subdirectory(include)

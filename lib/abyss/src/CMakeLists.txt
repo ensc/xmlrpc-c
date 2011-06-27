@@ -27,8 +27,6 @@ set(xmlrpc_abyss_SOURCES
   session.h
   socket.c
   socket.h
-  socket_unix.c
-  socket_unix.h
   thread.h
   token.c
   token.h
@@ -37,19 +35,25 @@ set(xmlrpc_abyss_SOURCES
 
 add_definitions(-D_UNIX)
 
-if(ENABLE_ABYSS_THREADS)
-  list(APPEND xmlrpc_abyss_SOURCES thread_pthread.c)
-else(ENABLE_ABYSS_THREADS)
-  list(APPEND xmlrpc_abyss_SOURCES thread_fork.c)
-endif(ENABLE_ABYSS_THREADS)
+if(WIN32)
+  list(APPEND xmlrpc_abyss_SOURCES thread_windows.c)
+else(WIN32)
+  list(APPEND xmlrpc_abyss_SOURCES socket_unix.c socket_unix.h)
+
+  if(ENABLE_ABYSS_THREADS)
+    list(APPEND xmlrpc_abyss_SOURCES thread_pthread.c)
+  else(ENABLE_ABYSS_THREADS)
+    list(APPEND xmlrpc_abyss_SOURCES thread_fork.c)
+  endif(ENABLE_ABYSS_THREADS)
+endif(WIN32)
 
 add_library(xmlrpc_abyss SHARED ${xmlrpc_abyss_SOURCES})
 target_link_libraries(xmlrpc_abyss xmlrpc_util)
 
 if(ENABLE_ABYSS_THREADS)
   set_target_properties(xmlrpc_abyss PROPERTIES DEFINE_SYMBOL _THREAD)
-  target_link_libraries(xmlrpc_abyss pthread)
-  ensc_pkgconfig_lib(xmlrpc_abyss "-lpthread")
+  target_link_libraries(xmlrpc_abyss ${THREAD_LIBS})
+  ensc_pkgconfig_lib(xmlrpc_abyss "${THREAD_LIBS_PKGCONFIG}")
 endif(ENABLE_ABYSS_THREADS)
 
 install(TARGETS xmlrpc_abyss

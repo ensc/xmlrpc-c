@@ -52,9 +52,15 @@
 
 /* MSVCRT means we're using the Microsoft Visual C++ runtime library */
 
-#ifdef _MSC_VER
-/* The compiler is Microsoft Visual C++. */
+#if defined(_MSC_VER)
+  /* The compiler is Microsoft Visual C++ */
   #define MSVCRT _MSC_VER
+#elif defined(__MINGW32__)
+  /* The compiler is Mingw, which is the Windows version of the GNU
+     compiler. Programs built with this normally use the Microsoft Visual
+     C++ runtime library.
+  */
+  #define MSVCRT 1
 #else
   #define MSVCRT 0
 #endif
@@ -82,6 +88,9 @@
 
 #define HAVE_PTHREAD 1
 
+/* Note that the return value of XMLRPC_VSNPRINTF is int on Windows,
+   ssize_t on POSIX.
+*/
 #if MSVCRT
   #define XMLRPC_VSNPRINTF _vsnprintf
 #else
@@ -102,7 +111,7 @@
   #define XMLRPC_CLOSESOCKET close
 #endif
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
 /* Starting with MSVC 8, the runtime library defines various POSIX functions
    such as strdup() whose names violate the ISO C standard (the standard
    says the strXXX names are reserved for the standard), but warns you of

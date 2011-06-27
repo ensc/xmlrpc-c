@@ -47,7 +47,6 @@ set(client_LIBS   ${client_wininet_LIBS} ${client_libwww_LIBS} ${client_curl_LIB
 
 
 add_subdirectory(cpp)
-add_subdirectory(test)
 
 
 
