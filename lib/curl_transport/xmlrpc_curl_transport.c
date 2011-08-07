@@ -85,7 +85,9 @@
 #include "xmlrpc-c/time_int.h"
 
 #include <curl/curl.h>
+#ifdef NEED_CURL_TYPES_H
 #include <curl/types.h>
+#endif
 #include <curl/easy.h>
 #include <curl/multi.h>
 
@@ -833,6 +835,11 @@ getXportParms(xmlrpc_env *                          const envP,
         curlSetupP->proxyType = CURLPROXY_HTTP;
     else
         curlSetupP->proxyType = curlXportParmsP->proxy_type;
+
+    if (!curlXportParmsP || parmSize < XMLRPC_CXPSIZE(gssapi_delegation))
+        curlSetupP->gssapiDelegation = false;
+    else
+        curlSetupP->gssapiDelegation = !!curlXportParmsP->gssapi_delegation;
 
     getTimeoutParm(envP, curlXportParmsP, parmSize, &curlSetupP->timeout);
 }
