@@ -26,9 +26,9 @@ testVersion(void) {
 #ifndef WIN32    
     /* xmlrpc_client_version_major, etc. are not exported from a Windows DLL */
 
-    TEST(major = xmlrpc_client_version_major);
-    TEST(minor = xmlrpc_client_version_minor);
-    TEST(point = xmlrpc_client_version_point);
+    TEST(major == xmlrpc_client_version_major);
+    TEST(minor == xmlrpc_client_version_minor);
+    TEST(point == xmlrpc_client_version_point);
 #endif
 }
 
@@ -134,7 +134,10 @@ testCreateCurlParms(void) {
     curlTransportParms1.proxy_port        = 0;
     curlTransportParms1.proxy_type        = XMLRPC_HTTPPROXY_HTTP;
     curlTransportParms1.proxy_auth        = XMLRPC_HTTPAUTH_NONE;
-    clientParms1.transportparm_size = XMLRPC_CXPSIZE(proxy_auth);
+    curlTransportParms1.proxy_userpwd     = "mypassword";
+    curlTransportParms1.gssapi_delegation = 1;
+
+    clientParms1.transportparm_size = XMLRPC_CXPSIZE(gssapi_delegation);
     xmlrpc_client_create(&env, 0, "testprog", "1.0",
                          &clientParms1, XMLRPC_CPSIZE(transportparm_size),
                          &clientP);

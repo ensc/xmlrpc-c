@@ -103,8 +103,8 @@ bytestringValFromParm(string const& valueString) {
 
     if (valueString.length() / 2 * 2 != valueString.length())
         throwf("Hexadecimal text is not an even "
-               "number of characters (it is %zu characters)",
-               valueString.length());
+               "number of characters (it is %u characters)",
+               (unsigned)valueString.length());
     else {
         vector<unsigned char> byteString(valueString.length() / 2);
         size_t strCursor;
