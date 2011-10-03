@@ -58,7 +58,7 @@ describeXmlElement(const xml_element * const elemP,
     printf("%sXML element type:         '%s'\n",
            prefix, xml_element_name(elemP));
 
-    printf("%sNumber of child elements: %u\n",
+    printf("%sNumber of child elements: %zu\n",
            prefix, xml_element_children_size(elemP));
 
     for (i = 0; i < xml_element_children_size(elemP); ++i) {
