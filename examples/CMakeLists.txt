@@ -24,6 +24,7 @@ endif(ENABLE_CPLUSPLUS)
 set(base_LIBS xmlrpc)
 ensc_add_example(json               c base)
 ensc_add_example(gen_sample_add_xml c base)
+ensc_add_example(parse_xml          c base)
 
 if(MUST_BUILD_CLIENT)
   set(client_LIBS xmlrpc_client)

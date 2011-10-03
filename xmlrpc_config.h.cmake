@@ -152,5 +152,14 @@
 #define XMLRPC_INT64  int64_t
 #define XMLRPC_PRId64 PRId64
 
+/* S_IRUSR is POSIX, defined in <sys/stat.h> Some old BSD systems and Windows
+   systems have S_IREAD instead.  Most Unix today (2011) has both.  In 2011,
+   Android has S_IRUSR and not S_IREAD.
+
+   We're ignoring S_IREAD now to see if anyone misses it.  If there are still
+   users that need it, we can handle it here.
+*/
+#define XMLRPC_S_IWUSR S_IWUSR
+#define XMLRPC_S_IRUSR S_IRUSR
 
 #endif
