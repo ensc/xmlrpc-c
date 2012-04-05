@@ -12,8 +12,8 @@ endif()
 
 
 set(XMLRPC_C_VERSION_MAJOR "1"  CACHE STRING "Version (major) of xmlrpc-c")
-set(XMLRPC_C_VERSION_MINOR "29" CACHE STRING "Version (minor) of xmlrpc-c")
-set(XMLRPC_C_VERSION_POINT "0"  CACHE STRING "Version (point) of xmlrpc-c")
+set(XMLRPC_C_VERSION_MINOR "30" CACHE STRING "Version (minor) of xmlrpc-c")
+set(XMLRPC_C_VERSION_POINT "1"  CACHE STRING "Version (point) of xmlrpc-c")
 
 set(XMLRPC_C_VERSION
   "${XMLRPC_C_VERSION_MAJOR}.${XMLRPC_C_VERSION_MINOR}.${XMLRPC_C_VERSION_POINT}"
@@ -148,19 +148,19 @@ endif(ENABLE_LIBXML2_BACKEND)
 
 ###########
 
-set(ENABLE_TOOLS           0 CACHE BOOL "Build the tools")
 pkg_check_modules(NCURSES ncurses)
 find_library(READLINE readline)
 
-if (ENABLE_TOOLS)
-  message(STATUS "Building tools")
-  if (MUST_BUILD_LIBWWW_CLIENT OR MUST_BUILD_WININET_CLIENT OR MUST_BUILD_CURL_CLIENT)
-    if (NCURSES_FOUND AND READLINE)
-      set(BUILD_XMLRPC_PSTREAM 1)
-      message(STATUS "Building xmlrpc_pstream tool")
-    endif()
-    set(BUILD_TOOLS 1)
+if (MUST_BUILD_LIBWWW_CLIENT OR MUST_BUILD_WININET_CLIENT OR MUST_BUILD_CURL_CLIENT)
+  if (NCURSES_FOUND AND READLINE)
+    set(BUILD_XMLRPC_PSTREAM 1)
+    message(STATUS "Building xmlrpc_pstream tool")
   endif()
+  message(STATUS "Tools will be built")
+  set(BUILD_TOOLS 1)
+else()
+  message(STATUS "Tools will not be built")
+  set(BUILD_TOOLS 0)
 endif()
 
 ####  <wchar.h> tests

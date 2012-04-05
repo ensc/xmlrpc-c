@@ -3,6 +3,7 @@
 add_subdirectory(lib)
 add_subdirectory(binmode-rpc-kit)
 add_subdirectory(turbocharger)
+add_subdirectory(xml)
 
 if (MUST_BUILD_CLIENT)
   add_subdirectory(xmlrpc)

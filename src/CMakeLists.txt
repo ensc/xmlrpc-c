@@ -90,7 +90,7 @@ ensc_pkgconfig(xmlrpc_server)
 ### libxmlrpc_server_abyss.so
 if(ENABLE_ABYSS_SERVER)
   add_library(xmlrpc_server_abyss SHARED
-    xmlrpc_server_abyss.c)
+    xmlrpc_server_abyss.c abyss_handler.c)
   target_link_libraries(xmlrpc_server_abyss xmlrpc_abyss xmlrpc_server)
   list(APPEND lib_TARGETS xmlrpc_server_abyss)
   ensc_pkgconfig(xmlrpc_server_abyss)

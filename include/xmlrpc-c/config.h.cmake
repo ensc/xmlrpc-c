@@ -13,7 +13,7 @@
    This file was created by a make rule.
 */
 #define XMLRPC_HAVE_WCHAR		@HAVE_WCHAR_H@
-#ifdef WIN32
+#ifdef _WIN32
   /* SOCKET is a type defined by <winsock.h>.  Anyone who
      uses XMLRPC_SOCKET on a WIN32 system must #include
      <winsock.h>
