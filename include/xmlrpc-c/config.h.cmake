@@ -22,11 +22,13 @@
   #define XMLRPC_HAVE_TIMEVAL 0
   #define XMLRPC_HAVE_TIMESPEC 0
   #define XMLRPC_HAVE_PTHREAD 0
+  #define XMLRPC_HAVE_WINTHREAD 1
 #else
   #define XMLRPC_SOCKET int
   #define XMLRPC_HAVE_TIMEVAL 1
   #define XMLRPC_HAVE_TIMESPEC 1
   #define XMLRPC_HAVE_PTHREAD 1
+  #define XMLRPC_HAVE_WINTHREAD 0
 #endif
 
 #endif
