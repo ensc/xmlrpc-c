@@ -12,8 +12,8 @@ endif()
 
 
 set(XMLRPC_C_VERSION_MAJOR "1"  CACHE STRING "Version (major) of xmlrpc-c")
-set(XMLRPC_C_VERSION_MINOR "30" CACHE STRING "Version (minor) of xmlrpc-c")
-set(XMLRPC_C_VERSION_POINT "4"  CACHE STRING "Version (point) of xmlrpc-c")
+set(XMLRPC_C_VERSION_MINOR "31" CACHE STRING "Version (minor) of xmlrpc-c")
+set(XMLRPC_C_VERSION_POINT "0"  CACHE STRING "Version (point) of xmlrpc-c")
 
 set(XMLRPC_C_VERSION
   "${XMLRPC_C_VERSION_MAJOR}.${XMLRPC_C_VERSION_MINOR}.${XMLRPC_C_VERSION_POINT}"
@@ -76,6 +76,8 @@ if(WIN32)
       set(tmp 0)
     endif(WININET_CONFIG_EXECUTABLE)
   endif(DEFINED MUST_BUILD_WININET_CLIENT)
+
+  set(MSVCRT yes)
 else(WIN32)
   set(tmp 0)
 endif(WIN32)

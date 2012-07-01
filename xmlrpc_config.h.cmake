@@ -174,4 +174,10 @@
   #define XMLRPC_S_IRUSR S_IRUSR
 #endif
 
+#if MSVCRT
+  #define XMLRPC_CHDIR _chdir
+#else
+  #define XMLRPC_CHDIR chdir
+#endif
+
 #endif

@@ -37,3 +37,5 @@ add_custom_command(TARGET src-test
 
 enable_testing()
 add_test(runtests src-test)
+
+add_subdirectory(cpp)

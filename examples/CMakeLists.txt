@@ -39,7 +39,9 @@ endif(MUST_BUILD_CLIENT)
 if(MUST_BUILD_CURL_CLIENT)
   set(client_LIBS xmlrpc_client)
 
-  ensc_add_example(interrupted_client       c client)
+  if(NOT DEFINED MSVCRT)
+    ensc_add_example(interrupted_client       c client)
+  endif(NOT DEFINED MSVCRT)
 endif(MUST_BUILD_CURL_CLIENT)
 
 if(ENABLE_CGI_SERVER)
@@ -52,12 +54,15 @@ if(ENABLE_ABYSS_SERVER)
   set(abyss_server_LIBS xmlrpc_server_abyss)
 
   ensc_add_example(compound_value_server    c abyss_server)
-  ensc_add_example(interrupted_server       c abyss_server)
   ensc_add_example(xmlrpc_inetd_server      c abyss_server)
   ensc_add_example(xmlrpc_socket_server     c abyss_server)
   ensc_add_example(xmlrpc_loop_server       c abyss_server)
   ensc_add_example(xmlrpc_sample_add_server c abyss_server)
   ensc_add_example(xmlrpc_server_validatee  c abyss_server)
+
+  if(NOT DEFINED MSVCRT)
+    ensc_add_example(interrupted_server       c abyss_server)
+  endif(NOT DEFINED MSVCRT)
 endif(ENABLE_ABYSS_SERVER)
 
 ensc_set_link_exe_flags(${example_TARGETS})

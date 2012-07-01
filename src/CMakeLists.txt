@@ -58,7 +58,7 @@ add_library(xmlrpc SHARED
   xmlrpc_data.c xmlrpc_datetime.c xmlrpc_string.c
   xmlrpc_array.c xmlrpc_struct.c
   xmlrpc_build.c xmlrpc_decompose.c xmlrpc_parse.c xmlrpc_serialize.c
-  xmlrpc_base64.c xmlrpc_authcookie.c)
+  xmlrpc_authcookie.c)
 
 set_target_properties(xmlrpc
   PROPERTIES
